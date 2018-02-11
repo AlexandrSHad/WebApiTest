@@ -3,17 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApiTest.Models;
 
 namespace WebApiTest.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        //public ValuesController(IModel model)
+        //{
+        //}
+        
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            //return new string[] { "value1", "value2" };
+
+            var model = new Model1
+            {
+                Id = 1,
+                Property1 = "Prop 1"
+            };
+
+            return Ok(model);
         }
 
         // GET api/values/5
@@ -25,7 +38,7 @@ namespace WebApiTest.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]IModel model)
         {
         }
 
