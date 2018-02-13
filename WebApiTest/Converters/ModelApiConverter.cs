@@ -10,44 +10,33 @@ using WebApiTest.Models;
 
 namespace WebApiTest.Converters
 {
-    public class ModelApiConverter : CustomCreationConverter<IModel>
+    public class ModelApiConverter : JsonCreationConverter<IModel>
     {
-        public override IModel Create(Type objectType)
+        //private readonly Dictionary<ModelTypes, Type> _typesDictionary = new Dictionary<ModelTypes, Type> {
+        //    { ModelTypes.First,  typeof(Model1) },
+        //    { ModelTypes.Second, typeof(Model2) }
+        //};
+
+        public override IModel Create(Type objectType, JObject jObject)
         {
-            return new Model1();
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null)
-            {
-                return null;
-            }
-
-            JObject jObject = JObject.Load(reader);
-
-            //IModel obj = Create(objectType);
-
-            int modelType = jObject.Value<int>("modelType");
+            ModelTypes modelType = (ModelTypes)jObject.Value<int>("modelType");
 
             IModel obj;
 
             switch (modelType)
             {
-                case 1:
-                    //objectType = typeof(Model1);
+                case ModelTypes.First:
                     obj = new Model1();
                     break;
-                case 2:
-                    //objectType = typeof(Model2);
+                case ModelTypes.Second:
                     obj = new Model2();
                     break;
                 default:
-                    obj = new Model1();
-                    break;
+                    throw new ArgumentException();
             }
-            
-            serializer.Populate(jObject.CreateReader(), obj);
+
+            //IModel obj = (IModel)jObject.ToObject(_typesDictionary[modelType]);
+
             return obj;
         }
     }
