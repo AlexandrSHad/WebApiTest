@@ -30,7 +30,6 @@ namespace WebApiTest.Converters
 
             T obj = Create(objectType, jObject);
 
-            serializer.Populate(jObject.CreateReader(), obj);
             return obj;
         }
 
