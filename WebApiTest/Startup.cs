@@ -29,6 +29,7 @@ namespace WebApiTest
                 .AddMvc()
                 .AddJsonOptions(opt => {
                     opt.SerializerSettings.Converters.Insert(0, new ModelApiConverter());
+                    opt.SerializerSettings.Converters.Insert(1, new OfferConverter());
                 });
 
             //services.AddTransient<IModel, Model1>();

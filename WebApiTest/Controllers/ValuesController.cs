@@ -38,7 +38,12 @@ namespace WebApiTest.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]IModel model)
+        public void Post([FromBody] IModel model)
+        {
+        }
+
+        [HttpPost("offer")]
+        public void PostOffer([FromBody] Offer model)
         {
         }
 
