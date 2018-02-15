@@ -30,7 +30,7 @@ namespace WebApiTest
                 .AddJsonOptions(opt => {
                     opt.SerializerSettings.Converters.Insert(0, new ModelApiConverter());
                     opt.SerializerSettings.Converters.Insert(1, new OfferConverter());
-                    opt.SerializerSettings.Converters.Insert(2, new RealEstateDetailsConverter());
+                    //opt.SerializerSettings.Converters.Insert(2, new RealEstateDetailsConverter());
                 });
 
             //services.AddTransient<IModel, Model1>();
