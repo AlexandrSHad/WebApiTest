@@ -10,11 +10,30 @@ namespace WebApiTest.Converters
 {
     public class OfferConverter : JsonCreationConverter<Offer>
     {
-        public override Offer Create(Type objectType, JObject jObject, JsonSerializer serializer)
+        public override Offer Create(Type objectType, JObject jObject)
         {
+            var obj = new Offer();
+
             PropertyType propertyType = (PropertyType)jObject.Value<int>("propertyType");
 
-            Offer obj = (Offer)jObject.ToObject(typeof(Offer));
+            IRealEstateDetails details;
+
+            if (propertyType == PropertyType.Appartment)
+            {
+                details = jObject["realEstateDetails"].ToObject<AppartmentDetails>();
+            }
+            else if (propertyType == PropertyType.Garage)
+            {
+                details = jObject["realEstateDetails"].ToObject<GarageDetails>();
+            }
+            else
+            {
+                throw new ArgumentException("Unknowm property type.");
+            }
+
+            obj.RealEstateDetails = details;
+
+            //Offer obj = (Offer)jObject.ToObject(typeof(Offer));
 
             //Offer obj = (Offer)jObject.ToObject(typeof(Offer), serializer);
 
@@ -23,8 +42,6 @@ namespace WebApiTest.Converters
 
 
             //Offer obj = (Offer)jObject.ToObject(typeof(Offer), ser);
-
-            //IRealEstateDetails details;
 
             //if (propertyType == PropertyType.Appartment)
             //{

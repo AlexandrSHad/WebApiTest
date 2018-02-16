@@ -12,7 +12,7 @@ namespace WebApiTest.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public PropertyType PropertyType { get; set; }
-        [JsonConverter(typeof(RealEstateDetailsConverter))]
+        //[JsonConverter(typeof(RealEstateDetailsConverter))]
         public IRealEstateDetails RealEstateDetails { get; set; }
     }
 }

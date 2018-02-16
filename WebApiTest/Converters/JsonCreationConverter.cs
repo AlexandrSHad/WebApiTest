@@ -12,7 +12,7 @@ namespace WebApiTest.Converters
         public override bool CanWrite { get; } = false;
         public override bool CanRead { get; } = true;
 
-        public abstract T Create(Type objectType, JObject jObject, JsonSerializer serializer);
+        public abstract T Create(Type objectType, JObject jObject);
 
         public override bool CanConvert(Type objectType)
         {
@@ -28,7 +28,9 @@ namespace WebApiTest.Converters
 
             JObject jObject = JObject.Load(reader);
 
-            T obj = Create(objectType, jObject, serializer);
+            T obj = Create(objectType, jObject);
+
+            serializer.Populate(jObject.CreateReader(), obj);
 
             return obj;
         }

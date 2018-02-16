@@ -17,7 +17,7 @@ namespace WebApiTest.Converters
             { ModelTypes.Second, typeof(Model2) }
         };
 
-        public override IModel Create(Type objectType, JObject jObject, JsonSerializer serializer)
+        public override IModel Create(Type objectType, JObject jObject)
         {
             ModelTypes modelType = (ModelTypes)jObject.Value<int>("modelType");
 

@@ -10,10 +10,8 @@ namespace WebApiTest.Converters
 {
     public class RealEstateDetailsConverter : JsonCreationConverter<IRealEstateDetails>
     {
-        public override IRealEstateDetails Create(Type objectType, JObject jObject, JsonSerializer serializer)
+        public override IRealEstateDetails Create(Type objectType, JObject jObject)
         {
-            //throw new NotImplementedException();
-
             return new AppartmentDetails { RoomsCount = 100 };
         }
     }
