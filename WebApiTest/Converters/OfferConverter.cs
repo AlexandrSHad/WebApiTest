@@ -8,39 +8,53 @@ using WebApiTest.Models;
 
 namespace WebApiTest.Converters
 {
-    public class OfferConverter : JsonCreationConverter<Offer>
+    public class OfferConverter : JsonConverter
     {
-        public override Offer Create(Type objectType, JObject jObject, JsonSerializer serializer)
+        public override bool CanWrite { get; } = false;
+        public override bool CanRead { get; } = true;
+
+        public override bool CanConvert(Type objectType)
         {
+            return typeof(Offer).IsAssignableFrom(objectType);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
+
+            JObject jObject = JObject.Load(reader);
+
             PropertyType propertyType = (PropertyType)jObject.Value<int>("propertyType");
 
-            Offer obj = (Offer)jObject.ToObject(typeof(Offer));
+            var obj = new Offer();
+            serializer.Populate(jObject.CreateReader(), obj);
 
-            //Offer obj = (Offer)jObject.ToObject(typeof(Offer), serializer);
+            IRealEstateDetails details;
+            if (propertyType == PropertyType.Appartment)
+            {
+                details = new AppartmentDetails();
+            }
+            else if (propertyType == PropertyType.Garage)
+            {
+                details = new GarageDetails();
+            }
+            else
+            {
+                throw new ArgumentException("Unknown property type.");
+            }
 
-            //var ser = new JsonSerializer();
-            //ser.Converters.Insert(0, new RealEstateDetailsConverter());
+            serializer.Populate(jObject["realEstateDetails"].CreateReader(), details);
 
-
-            //Offer obj = (Offer)jObject.ToObject(typeof(Offer), ser);
-
-            //IRealEstateDetails details;
-
-            //if (propertyType == PropertyType.Appartment)
-            //{
-            //    details = jObject["details"].ToObject<AppartmentDetails>();
-            //}
-            //else// if (propertyType == PropertyType.Garage)
-            //{
-            //    details = jObject["details"].ToObject<GarageDetails>();
-            //}
-
-            //if (details != null)
-            //{
-            //    obj.RealEstateDetails = details;
-            //}
+            obj.RealEstateDetails = details;
 
             return obj;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
         }
     }
 }
