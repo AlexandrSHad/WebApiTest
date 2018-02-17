@@ -29,26 +29,21 @@ namespace WebApiTest.Converters
 
             PropertyType propertyType = (PropertyType)jObject.Value<int>("propertyType");
 
-            var obj = new Offer();
-            serializer.Populate(jObject.CreateReader(), obj);
-
-            IRealEstateDetails details;
             if (propertyType == PropertyType.Appartment)
             {
-                details = new AppartmentDetails();
+                serializer.Converters.Insert(0, new RealEstateDetailsConverter<AppartmentDetails>());
             }
             else if (propertyType == PropertyType.Garage)
             {
-                details = new GarageDetails();
+                serializer.Converters.Insert(0, new RealEstateDetailsConverter<GarageDetails>());
             }
             else
             {
                 throw new ArgumentException("Unknown property type.");
             }
 
-            serializer.Populate(jObject["realEstateDetails"].CreateReader(), details);
-
-            obj.RealEstateDetails = details;
+            var obj = new Offer();
+            serializer.Populate(jObject.CreateReader(), obj);
 
             return obj;
         }

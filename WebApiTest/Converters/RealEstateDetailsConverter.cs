@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using WebApiTest.Models;
 
 namespace WebApiTest.Converters
 {
-    public class RealEstateDetailsConverter : JsonCreationConverter<IRealEstateDetails>
+    public class RealEstateDetailsConverter<T> : CustomCreationConverter<IRealEstateDetails> where T: IRealEstateDetails, new() 
     {
-        public override IRealEstateDetails Create(Type objectType, JObject jObject, JsonSerializer serializer)
+        public override IRealEstateDetails Create(Type objectType)
         {
-            //throw new NotImplementedException();
-
-            return new AppartmentDetails { RoomsCount = 100 };
+            return new T();
         }
     }
 }
